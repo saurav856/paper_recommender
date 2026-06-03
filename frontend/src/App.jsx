@@ -21,51 +21,57 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-2">ArXiv Paper Recommender</h1>
-      <p className="text-gray-400 mb-8">Paste an ArXiv paper URL to find similar research</p>
+    <div className="min-h-screen bg-white text-gray-900 px-6 py-16 max-w-2xl mx-auto">
+      
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold tracking-tight mb-3">Research Paper Recommender</h1>
+        <p className="text-gray-500 text-lg">Paste an ArXiv link. Find what to read next.</p>
+      </div>
 
-      <div className="flex gap-3 mb-8">
+      <div className="flex flex-col gap-3 mb-12">
         <input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://arxiv.org/abs/1706.03762"
-          className="flex-1 bg-gray-800 rounded-lg px-4 py-3 text-white outline-none"
+          className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-400 transition-colors"
         />
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
+          className="w-full bg-gray-900 text-white py-3 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-40"
         >
-          {loading ? "Searching..." : "Find Similar"}
+          {loading ? "Finding similar papers..." : "Find Similar Papers"}
         </button>
       </div>
 
-      {error && <p className="text-red-400 mb-4">{error}</p>}
+      {error && (
+        <p className="text-red-500 text-sm mb-6">{error}</p>
+      )}
 
       {result && (
         <div>
-          <div className="bg-gray-800 rounded-lg p-5 mb-6">
-            <p className="text-xs text-blue-400 mb-1">INPUT PAPER</p>
-            <h2 className="text-lg font-semibold">{result.input_paper.title}</h2>
+          <div className="border border-gray-100 rounded-lg p-5 mb-8 bg-gray-50">
+            <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">Input Paper</p>
+            <h2 className="text-base font-semibold leading-snug">{result.input_paper.title}</h2>
           </div>
 
-          <h3 className="text-gray-400 text-sm mb-3">RECOMMENDED PAPERS</h3>
-          <div className="flex flex-col gap-4">
+          <p className="text-xs text-gray-400 uppercase tracking-widest mb-4">Recommended Papers</p>
+          
+          <div className="flex flex-col divide-y divide-gray-100">
             {result.recommendations.map((paper, i) => (
-              <div key={i} className="bg-gray-800 rounded-lg p-5">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-semibold flex-1 pr-4">{paper.title}</h4>
-                  <span className="text-blue-400 text-sm shrink-0">
+              <div key={i} className="py-5">
+                <div className="flex justify-between items-start gap-4 mb-2">
+                  <h3 className="text-sm font-semibold leading-snug">{paper.title}</h3>
+                  <span className="text-xs text-gray-400 shrink-0 mt-0.5">
                     {(paper.score * 100).toFixed(0)}% match
                   </span>
                 </div>
-                <p className="text-gray-400 text-sm line-clamp-3">{paper.abstract}</p>
+                <p className="text-gray-500 text-sm line-clamp-3 mb-3">{paper.abstract}</p>
                 <a
                   href={paper.url}
                   target="_blank"
-                  className="text-blue-400 text-sm mt-2 inline-block hover:underline"
+                  className="text-xs text-gray-900 font-medium hover:underline"
                 >
                   View on ArXiv →
                 </a>
