@@ -21,7 +21,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 def get_papers():
     conn = sqlite3.connect('papers.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT id, title, abstract, authors, url, embedding FROM papers')
+    cursor.execute('SELECT id, title, abstract, authors, url, category , embedding FROM papers')
     rows = cursor.fetchall()
     conn.close()
     return rows
@@ -46,7 +46,7 @@ def recommend(payload: dict):
     # Compute similarities
     similarities = []
     for row in papers:
-        db_embedding = np.array(json.loads(row[5])).reshape(1, -1)
+        db_embedding = np.array(json.loads(row[6])).reshape(1, -1)
         score = cosine_similarity(input_embedding, db_embedding)[0][0]
         similarities.append((score, row))
     
@@ -64,6 +64,7 @@ def recommend(payload: dict):
                 "title": row[1],
                 "abstract": row[2],
                 "url": row[4],
+                "category": row[5],
                 "score": float(score)
             }
             for score, row in top5

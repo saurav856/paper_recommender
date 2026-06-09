@@ -90,7 +90,9 @@ export default function App() {
           <p className="text-xs text-gray-400 uppercase tracking-widest mb-4">Recommended Papers</p>
 
           <div className="flex flex-col divide-y divide-gray-100">
-            {result.recommendations.map((paper, i) => (
+            {result.recommendations
+            .filter((paper) => !activeCategory || paper.category === activeCategory)
+            .map((paper, i) => (
               <div key={i} className="py-5">
                 <div className="flex justify-between items-start gap-4 mb-2">
                   <h3 className="text-sm font-semibold leading-snug">{paper.title}</h3>
